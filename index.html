@@ -536,6 +536,13 @@ body.fx-bad:after{box-shadow:inset 0 0 0 6px rgba(225,29,72,.55),inset 0 0 60px 
 .bln.popok{opacity:1;animation:pop2 .45s forwards;background:radial-gradient(circle,#22c55e,#15803d)}.bln.popbad{opacity:1;animation:shake .4s,pop2 .5s .35s forwards;background:#e11d48}.bln.fade{opacity:.35;animation:none}
 @keyframes pop2{50%{transform:scale(1.22)}100%{transform:scale(0);opacity:0}}
 @media(max-width:620px){.sky{grid-template-columns:repeat(2,1fr);gap:12px}.bln{max-width:140px;font-size:.82rem}}
+.stagepop{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--p) 30%,rgba(10,8,30,.35));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fadein .25s;pointer-events:none}
+.stagepop>div{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--card);border-radius:30px;padding:26px 34px;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);animation:spop .5s cubic-bezier(.3,1.6,.5,1)}
+.stagepop span{font-size:3.6rem;animation:spin3 .8s ease}.stagepop small{color:var(--mut);font-weight:800}.stagepop b{font-size:1.6rem;color:var(--p)}.stagepop em{font-style:normal;color:var(--mut);font-size:.9rem}
+.stagepop.out{opacity:0;transition:opacity .4s}
+@keyframes spop{from{transform:scale(.4);opacity:0}}@keyframes spin3{from{transform:rotate(-180deg) scale(.3)}}
+.wsid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;background:color-mix(in srgb,var(--p) 7%,var(--card));border:1px dashed color-mix(in srgb,var(--p) 35%,transparent);border-radius:14px;padding:8px 12px;margin-bottom:10px;font-size:.88rem}
+
 </style>
 </head>
 <body>
@@ -3340,6 +3347,123 @@ var _hdr15 = header;
 header = function () { return _hdr15().replace('<button class="btn sm sec" onclick="boardMode()">', '<button class="btn sm sec" onclick="toggleSnd()">' + (sndOn() ? '🔊 المؤثرات الصوتية: مفعّلة' : '🔇 المؤثرات الصوتية: متوقفة') + '</button><button class="btn sm sec" onclick="boardMode()">'); };
 var _bnh15 = bnavHtml;
 bnavHtml = function () { return S.page === 'play' ? '' : _bnh15(); };
+
+/* ════════════ الإصدار ١٦: رحلة الدرس مغامرة متنوعة + بيانات المعلم في أوراق العمل ════════════ */
+
+/* ---------- (أ) ألعاب الساحة داخل الرحلة نفسها ---------- */
+var _bg16 = buildGames;
+buildGames = function (id, cards) {
+  var G = _bg16(id, cards), B = BANKS[id] || [], grade = N(S.cb && S.cb.course.gradeNo) || 4;
+  var mc = shuffle(B.filter(function (x) { return x.kind === 'اختيار'; })).map(shuffleQ), extra = [];
+  if (mc.length >= 3) extra.push({ type: 'balloon', qs: mc.slice(0, 3) });
+  if (mc.length >= 6) extra.push({ type: 'lightning', qs: mc.slice(3, 6), sec: grade <= 3 ? 14 : grade >= 10 ? 7 : 10 });
+  var fun = shuffle(extra), rest = shuffle(G), out = [];
+  if (fun[0]) out.push(fun[0]);
+  rest.forEach(function (g) { if (out.length < (grade <= 3 ? 3 : 4)) out.push(g); });
+  if (fun[1] && out.length < (grade <= 3 ? 3 : 4)) out.splice(Math.min(2, out.length), 0, fun[1]);
+  return out.length ? out : G;
+};
+var _ig16 = initGame;
+initGame = function (g) { if (g.type === 'balloon' || g.type === 'lightning') return { g: g, i: 0, ok: 0, tot: g.qs.length, a: null, done: false }; return _ig16(g); };
+var _gt16 = gTitle;
+gTitle = function (t) { return t === 'balloon' ? '🎈 افقع البالون الذي يحمل الإجابة الصحيحة' : t === 'lightning' ? '⚡ سؤال البرق: أسرع = نقاط أكثر' : _gt16(t); };
+var _gb16 = gameBody;
+gameBody = function (g) {
+  var M = GM;
+  if (g.type === 'balloon' || g.type === 'lightning') {
+    if (M.i >= g.qs.length) { M.done = true; return '<div class="jrbig">' + (g.type === 'balloon' ? '🎈' : '⚡') + '</div>'; }
+    var x = g.qs[M.i], next = M.a != null ? '<button class="btn" style="margin-top:10px" onclick="GM.i++;GM.a=null;render()">' + (M.i < g.qs.length - 1 ? 'التالي ←' : 'إنهاء اللعبة ✔') + '</button>' : '';
+    if (g.type === 'balloon') return '<div class="mut">' + (M.i + 1) + ' من ' + g.qs.length + '</div><div class="jrq">' + esc(x.q) + '</div><div class="sky">' + x.options.map(function (o, j) { var st = M.a == null ? '' : j === x.correct ? 'popok' : j === M.a ? 'popbad' : 'fade'; return '<button class="bln ' + st + '" style="--b:' + BCOL[(j + M.i) % BCOL.length] + ';--d:' + (j * .3) + 's" ' + (M.a == null ? 'onclick="jBal(' + j + ')"' : 'disabled') + '><span>' + esc(o) + '</span></button>'; }).join('') + '</div>' + next;
+    setTimeout(jLtTimer, 30);
+    var mult = SC.streak >= 4 ? 3 : SC.streak >= 2 ? 2 : 1;
+    return '<div class="row" style="justify-content:space-between"><span class="mut">' + (M.i + 1) + ' من ' + g.qs.length + '</span><span class="mult m' + mult + '">×' + mult + '</span></div><div class="tbar"><i id="jltbar"></i></div>' + jrQ(x, M.a === 'time' ? -1 : M.a, 'jLt') + (M.a != null ? '<div class="jrfb ' + (M.a === x.correct ? 'ok' : 'bad') + '">' + (M.a === 'time' ? '⏰ انتهى الوقت — ' : '') + (M.a === x.correct ? esc(T('praise_correct')) : 'الإجابة: ' + esc(x.options[x.correct])) + '</div>' : '') + next;
+  }
+  return _gb16(g);
+};
+function jBal(j) { var x = GM.g.qs[GM.i]; GM.a = j; sfx('pop'); if (j === x.correct) { GM.ok++; setTimeout(function () { good(); }, 80); } else setTimeout(badA, 80); render(); }
+var JLT = null;
+function jLtTimer() {
+  var M = GM; if (!M || M.g.type !== 'lightning' || M.a != null || M.i >= M.g.qs.length) return; clearInterval(JLT);
+  var cur = M.i, t0 = Date.now(), dur = M.g.sec * 1000, lastS = -1; M._t0 = t0;
+  JLT = setInterval(function () { var el = $('jltbar'); if (!el || GM !== M || M.i !== cur || M.a != null) return clearInterval(JLT); var p = 1 - (Date.now() - t0) / dur, left = Math.ceil((dur - (Date.now() - t0)) / 1000); el.style.width = Math.max(0, p * 100) + '%'; if (left <= 3 && left !== lastS && left > 0) { lastS = left; sfx('tick'); } if (p <= 0) { clearInterval(JLT); M.a = 'time'; badA(); render(); } }, 100);
+}
+function jLt(j) { clearInterval(JLT); var M = GM, x = M.g.qs[M.i]; M.a = j; if (j === x.correct) { M.ok++; var mult = SC.streak >= 3 ? 3 : SC.streak >= 1 ? 2 : 1, speed = Math.max(0, Math.round((M.g.sec * 1000 - (Date.now() - (M._t0 || Date.now()))) / 1000)); good(10 * mult + speed); } else badA(); render(); }
+
+/* «ماذا تعرف؟» بالبالونات + انتقالات احتفالية بين المحطات */
+var STAGE_NAMES = [['🎯', 'ماذا تعرف؟', 'افقع البالون الذي تظنه صحيحًا'], ['📖', 'تعلّم', 'بطاقات الدرس خطوة بخطوة'], ['🎮', 'العب وتعلّم', 'ألعاب متنوعة من الدرس'], ['🏁', 'بطاقة الخروج', 'لنرَ كم تعلّمت!']];
+function stagePop(n) {
+  var s = STAGE_NAMES[n]; if (!s) return;
+  var d = document.createElement('div'); d.className = 'stagepop'; d.innerHTML = '<div><span>' + s[0] + '</span><small>المحطة ' + (n + 1) + ' من 4</small><b>' + s[1] + '</b><em>' + s[2] + '</em></div>';
+  document.body.appendChild(d); sfx(n ? 'streak' : 'tap'); setTimeout(function () { d.classList.add('out'); }, 1150); setTimeout(function () { d.remove(); }, 1600);
+}
+var _pj16 = PP.journey;
+PP.journey = function () {
+  if (JR && !JR.done && JR._ls !== JR.step && JR.step >= 0 && JR.step <= 3) { JR._ls = JR.step; setTimeout(function () { stagePop(JR.step); }, 60); }
+  if (JR && JR.step === 0) {
+    var l = lessonById(JR.id) || {}, x = JR.pre[JR.i];
+    return '<div class="jr" data-read><div class="jrhead"><span>' + esc(l.icon || '📘') + '</span><b>رحلة درس «' + esc(l.name) + '»</b>' + ptsChip() + '</div>' + jrBar() +
+      '<div class="jrcard center"><div class="jrtag">🎯 ماذا تعرف؟ — ' + (JR.i + 1) + ' من ' + JR.pre.length + '</div><div class="mut">لا بأس إن لم تعرف — هذا قبل الدرس 😊 افقع البالون الذي تظنه صحيحًا</div><div class="jrq">' + esc(x.q) + '</div><div class="sky">' +
+      x.options.map(function (o, j) { return '<button class="bln" style="--b:' + BCOL[(j + JR.i) % BCOL.length] + ';--d:' + (j * .25) + 's" onclick="jrPreBal(this,' + j + ')"><span>' + esc(o) + '</span></button>'; }).join('') + '</div></div></div>';
+  }
+  return _pj16();
+};
+function jrPreBal(el, j) { sfx('pop'); el.classList.add('popok'); document.querySelectorAll('.sky .bln').forEach(function (b) { b.disabled = true; if (b !== el) b.classList.add('fade'); }); setTimeout(function () { _pre15(j); }, 420); }
+/* بطاقات «تعلّم»: صوت قلب خفيف عند التنقل */
+var _render16 = render;
+render = function () { _render16(); if (S.page === 'journey' && JR && JR.step === 1) document.querySelectorAll('.jrcard.learn .btn').forEach(function (b) { b.addEventListener('click', function () { sfx('flip'); }, { once: true }); }); };
+
+/* ---------- (ب) بيانات المعلم في أوراق العمل ---------- */
+/* الأولوية: بيانات المعلم المسجّل (إن فعّلها) ← معلم المقرر ← البيانات الافتراضية للمنصة */
+function wsInfo() {
+  var st = S.b.settings, m = S.cb ? (J(S.cb.course.meta, {}) || {}) : {}, pr = S.adm && S.adm.data && S.adm.data.me && S.adm.data.me.profile;
+  var o = { name: st.teacherName || '', school: st.schoolName || '', email: st.email || '', src: 'المنصة' };
+  if (m.teacher || m.school) { o.name = m.teacher || o.name; o.school = m.school || o.school; o.email = m.email || o.email; o.src = 'المقرر'; }
+  if (pr && pr.use !== false && pr.name) { o.name = pr.name; o.school = pr.school || o.school; o.email = pr.email || o.email; o.src = 'بياناتك'; }
+  return o;
+}
+var _ws16 = PP.wsheet;
+PP.wsheet = function (p) {
+  var h = _ws16(p); if (h.indexOf('class="ws"') < 0) return h;
+  var st = S.b.settings, W = wsInfo(), sw = function (a, b) { if (a && a !== b) h = h.split(esc(a)).join(esc(b)); };
+  sw(st.schoolName, W.school); sw(st.teacherName, W.name); sw(st.email, W.email);
+  var info = '<div class="wsid noprint"><span>✍️ يظهر في الورقة: <b>' + esc(W.name || '—') + '</b>' + (W.school ? ' · ' + esc(W.school) : '') + ' <small class="mut">(' + W.src + ')</small></span>' + (S.adm ? '<button class="btn sm sec" onclick="go(\'a_profile\',{},true)">✏️ بياناتي</button>' : '') + '</div>';
+  return h.replace('<div class="wsbar noprint">', info + '<div class="wsbar noprint">');
+};
+/* صفحة «بياناتي» في لوحة المعلم */
+NAV[3][2].splice(1, 0, ['a_profile', '👤', 'بياناتي', null, 'اسمك ومدرستك كما يظهران في أوراق العمل التي تطبعها.']);
+AP.a_profile = function () {
+  if (admGuard()) return '';
+  var me = ME(), pr = me.profile || {}, st = D().settings;
+  return admBar() + '<div class="hero"><h1 style="margin:0">👤 بياناتي في أوراق العمل</h1><p class="mut">' + (me.owner ? 'بياناتك هي البيانات الافتراضية للمنصة كلها.' : 'تظهر بياناتك في رأس أوراق العمل وتذييلها عندما تطبعها وأنت مسجّل الدخول.') + '</p></div>' +
+    '<div class="card"><div class="grid2"><div><label class="f">الاسم كما يظهر في الورقة</label><input id="pf_n" value="' + esc(pr.name || (me.owner ? st.teacherName : me.name) || '') + '" placeholder="أ. فلان بن فلان"></div><div><label class="f">المدرسة</label><input id="pf_s" value="' + esc(pr.school || (me.owner ? st.schoolName : '') || '') + '" placeholder="' + esc(st.schoolName || '') + '"></div></div><label class="f">بريد التواصل (اختياري)</label><input id="pf_e" dir="ltr" value="' + esc(pr.email || (me.owner ? st.email : '') || '') + '">' +
+    (me.owner ? '' : '<label class="row" style="margin:6px 0"><input type="checkbox" id="pf_u"' + (pr.use === false ? '' : ' checked') + '> استخدم بياناتي في الأوراق التي أطبعها</label>') +
+    '<button class="btn" onclick="saveProfile()">💾 حفظ</button></div>' +
+    '<div class="help">💡 ترتيب ما يظهر في الورقة:\n١) بيانات المعلم المسجّل الذي يطبعها (إن فعّلها).\n٢) «معلم المقرر» المحدد في إعدادات المقرر — ويراه الطلاب وأولياء الأمور عند الطباعة.\n٣) البيانات الافتراضية للمنصة (من الإعدادات).</div>';
+};
+function saveProfile() {
+  var u = $('pf_u');
+  call('aSaveProfile', { token: S.adm.token, name: $('pf_n').value, school: $('pf_s').value, email: $('pf_e').value, use: u ? u.checked : true }).then(function (r) { S.adm.data = r.data; toast('💾 حُفظت بياناتك'); render(); }).catch(function (e) { toast(e, 'err'); });
+}
+/* معلم المقرر ومدرسته في نموذج المقرر */
+var _cf16 = courseForm;
+courseForm = function (id) {
+  _cf16(id);
+  var k = id ? D().courses.filter(function (x) { return x.id === id; })[0] : null, m = k ? (J(k.meta, {}) || {}) : {};
+  var anchor = $('k_st'); if (!anchor) return;
+  var box = document.createElement('div');
+  box.innerHTML = '<div class="grid2"><div><label class="f">معلم المقرر (يظهر في أوراق العمل)</label><input id="k_teach" value="' + esc(m.teacher || '') + '" placeholder="' + esc(D().settings.teacherName || 'الافتراضي') + '"></div><div><label class="f">المدرسة</label><input id="k_school" value="' + esc(m.school || '') + '" placeholder="' + esc(D().settings.schoolName || 'الافتراضي') + '"></div></div><div class="mut" style="font-size:.74rem;margin:-6px 0 8px">اتركهما فارغين لتظهر البيانات الافتراضية للمنصة.</div>';
+  anchor.parentNode.insertBefore(box, anchor.nextSibling);
+};
+var _sc16 = saveCourse;
+saveCourse = function (id) {
+  var t = $('k_teach'), s = $('k_school');
+  if (!t) return _sc16(id);
+  var k = id ? D().courses.filter(function (x) { return x.id === id; })[0] : null, m = k ? (J(k.meta, {}) || {}) : {};
+  m.teacher = t.value.trim(); m.school = s.value.trim(); if (!m.teacher) delete m.teacher; if (!m.school) delete m.school;
+  var gn = $('k_gn').value, sub = $('k_s').value || SUBJECTS[$('k_sk').value].name;
+  var d = { token: S.adm.token, id: id || undefined, subject: sub, subjectKey: $('k_sk').value, gradeNo: gn, grade: GRADES[gn].name, term: $('k_t').value, year: $('k_y').value, icon: $('k_i').value, color: $('k_c').value, title: $('k_ti').value, status: $('k_st').value, order: ($('k_o2') || {}).value, meta: JSON.stringify(m) };
+  call('aSaveCourse', d).then(function (r) { S.adm.data = r.data; S.ac = r.id; closeModal(); toast('حُفظ المقرر ✅'); if (!id) go('a_wizard', {}, true); else render(); }).catch(function (e) { toast(e, 'err'); });
+};
 
 (function () { try { var t = sessionStorage.getItem('lab_adm'); if (t) { call('aData', { token: t }, true).then(function (d) { S.adm = { token: t, data: d }; }).catch(function () { sessionStorage.removeItem('lab_adm'); }); } } catch (e) {} })();
 try { boot(); } catch (e) { showFatal('boot: ' + (e && e.message)); }

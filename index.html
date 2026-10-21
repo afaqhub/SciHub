@@ -473,6 +473,8 @@ header.top .title{white-space:nowrap}
 body:not(:has(.bnav)) #totop{bottom:calc(20px + env(safe-area-inset-bottom))}
 @media(min-width:901px){body:has(.bnav.adm) #totop{bottom:24px}}
 @media print{#totop{display:none}}
+.pastebox{border:2px solid color-mix(in srgb,var(--p) 35%,transparent)}.pastebox textarea{min-height:200px}
+@media(max-width:560px){.fullai>.row{flex-direction:column}.fullai .bigai{width:52px;height:52px;font-size:2rem;margin:0 0 6px}}
 </style>
 </head>
 <body>
@@ -2798,10 +2800,20 @@ var _wz9 = AP.a_wizard;
 AP.a_wizard = function (p) {
   var h = _wz9(p); if (h.indexOf('wz_p') < 0) return h;
   var full = '<div class="card fullai"><div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="bigai">🚀</span><div class="sp"><span class="pill ok">الأسهل — يُنصح به</span><h2 style="margin:6px 0">أنشئ محتوى المقرر كاملًا بأمر واحد</h2><div class="flow"><div><b>١</b>انسخ الأمر الشامل</div><div><b>٢</b>افتح Claude أو ChatGPT أو Gemini، وارفع الكتاب (PDF)، والصق الأمر</div><div><b>٣</b>كلما توقف اكتب له «أكمل»</div><div><b>٤</b>انسخ ردوده (أو حمّل الملف الذي ينشئه)</div><div><b>٥</b>الصقها أو ارفع الملف هنا ← أضف</div></div>' +
-    '<div class="row" style="margin-top:12px"><button class="btn big" style="width:auto" onclick="copyText(composePrompt(\'full\',acCourse()),\'نُسخ الأمر الشامل ✅ الصقه في الذكاء الاصطناعي مع الكتاب\')">📋 انسخ الأمر الشامل</button><label class="btn sec" style="cursor:pointer">📎 ارفع ملفًا من الذكاء الاصطناعي<input type="file" accept=".txt,.md,.json,text/plain" style="display:none" onchange="wzFile(this)"></label></div>' +
+    '<div class="row" style="margin-top:12px"><button class="btn big" style="width:auto" onclick="copyText(composePrompt(\'full\',acCourse()),\'نُسخ الأمر الشامل ✅ الصقه في الذكاء الاصطناعي مع الكتاب\')">📋 انسخ الأمر الشامل</button><button class="btn sec" onclick="var b=$(\'pastebox\');if(b){b.scrollIntoView({behavior:\'smooth\',block:\'start\'});setTimeout(function(){$(\'wz_p\').focus()},500)}">📥 الصق الرد ↓</button><label class="btn sec" style="cursor:pointer">📎 ارفع ملفًا من الذكاء الاصطناعي<input type="file" accept=".txt,.md,.json,text/plain" style="display:none" onchange="wzFile(this)"></label></div>' +
     '<div class="mut" style="margin-top:8px;font-size:.8rem">💡 تستطيع لصق الردود دفعة واحدة أو على مراحل؛ كل ما تلصقه يُضاف للمراجعة، والمكرر يُتجاهل تلقائيًا. والكتاب الكبير جدًا؟ ارفعه على أجزاء (وحدة وحدة) بالطريقة المرحلية أدناه.</div></div></div></div>';
   h = h.replace('<div class="card"><div class="row" style="margin-bottom:6px"><span class="step"', full + '<details class="card" style="padding:12px 16px"><summary style="cursor:pointer;font-weight:800">🧱 الطريقة المرحلية: خطوة بخطوة (للكتب الكبيرة جدًا أو للمراجعة وحدةً وحدة)</summary><div style="margin-top:12px"><div class="card"><div class="row" style="margin-bottom:6px"><span class="step"');
-  return h + '</div></details>';
+  h += '</div></details>';
+  /* مربع اللصق: يُنقل خارج القسم المطوي ليكون ظاهرًا للطريقتين */
+  var s0 = h.indexOf('<label class="f" style="margin-top:6px">📥 الصق ردّ الذكاء الاصطناعي هنا</label>'), e0 = h.indexOf('انشر مباشرة دون مراجعة</label></div>', s0);
+  if (s0 > 0 && e0 > 0) {
+    e0 += 'انشر مباشرة دون مراجعة</label></div>'.length;
+    var box = h.slice(s0, e0); h = h.slice(0, s0) + '<div class="mut" style="margin-top:8px">⬆️ الصق الرد في مربع «الصق ردّ الذكاء الاصطناعي» أعلى الصفحة.</div>' + h.slice(e0);
+    var paste = '<div class="card pastebox" id="pastebox"><h3 style="margin:0 0 4px">📥 الصق ردّ الذكاء الاصطناعي هنا</h3><div class="mut" style="margin-bottom:8px">انسخ ردّه والصقه كما هو — أو ارفع الملف الذي أنشأه. يصلح للطريقتين.</div>' + box.replace('<label class="f" style="margin-top:6px">📥 الصق ردّ الذكاء الاصطناعي هنا</label>', '') + '</div>';
+    var at = h.indexOf('<details class="card" style="padding:12px 16px"><summary style="cursor:pointer;font-weight:800">🧱');
+    if (at > 0) h = h.slice(0, at) + paste + h.slice(at);
+  }
+  return h;
 };
 function wzFile(inp) {
   var f = inp.files && inp.files[0]; if (!f) return;

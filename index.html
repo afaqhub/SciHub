@@ -439,6 +439,26 @@ body:has(.bnav) #toast{bottom:calc(96px + env(safe-area-inset-bottom))}@media(mi
 .sfoot{display:flex;gap:10px;justify-content:center;align-items:center;max-width:720px;margin:18px auto 0}.sfoot .btn.big{width:auto;min-width:200px}
 @media(max-width:480px){.gchips{grid-template-columns:1fr 1fr}.rggrid.big .rgo{padding:16px 8px}}
 
+/* ── الإصدار ١٢: عرض الجوال ── */
+html,body{max-width:100%;overflow-x:clip}
+header.top .row1{flex-wrap:nowrap;gap:8px;min-width:0}header.top .row1>div{min-width:0}
+header.top .title{white-space:nowrap}
+.rolechip .rcl{opacity:.8}
+.joinbtn small{display:none}
+@media(max-width:560px){
+  header.top{padding:8px 10px}
+  .brandmark,.brandmark img{width:40px;height:40px}
+  .top .title{font-size:1.1rem}
+  header.top .rolechip .rcl{display:none}
+  header.top .icobtn{width:38px;height:38px;padding:0}
+  header.top .icobtn[title="أوسمتي"]{display:none}
+  .joinbtn{flex-direction:column;gap:0;padding:4px 8px;border-radius:14px;line-height:1.1}
+  .joinbtn span{display:none}.joinbtn small{display:block;font-size:.58rem;font-weight:800}
+  .hero2,.panel,.why,.card{max-width:100%}
+}
+.joinbanner{display:flex;align-items:center;gap:12px;border-radius:22px;padding:14px 16px;margin:14px 0;cursor:pointer;color:#fff;background:linear-gradient(120deg,#f59e0b,#ef4444);box-shadow:0 16px 30px -18px #ef4444;transition:transform .2s}
+.joinbanner:hover{transform:translateY(-3px)}.joinbanner .ji{font-size:2rem;width:54px;height:54px;border-radius:16px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}.joinbanner b{display:block;font-size:1.02rem}.joinbanner small{opacity:.92}
+.sback{margin:4px 0 0}
 </style>
 </head>
 <body>
@@ -939,7 +959,7 @@ function header() {
 }
 function footer() {
   var st = (S.b && S.b.settings) || {};
-  return '<footer class="noprint"><div><a onclick="go(\'about\')">عن المنصة والخصوصية</a>·' + (st.showImpact !== 'لا' ? '<a onclick="go(\'impact\')">📈 الأثر بالأرقام</a>·' : '') + '<a onclick="tour(0)">🎬 جولة سريعة</a>·' + (onlyCourse() ? '' : '<a onclick="go(\'library\')">📚 المقررات</a>·') + (st.allowJoin !== 'لا' && !onlyCourse() ? '<a onclick="go(\'join\')">🚀 اطلب منصتك</a>·' : '') + '<a onclick="feedbackModal()">💬 رأيك يهمنا</a>·<a onclick="go(\'admin\')">لوحة المعلم</a></div>' +
+  return '<footer class="noprint"><div><a onclick="go(\'about\')">عن المنصة والخصوصية</a>·' + (st.showImpact !== 'لا' ? '<a onclick="go(\'impact\')">📈 الأثر بالأرقام</a>·' : '') + '<a onclick="tour(0)">🎬 جولة سريعة</a>·' + (onlyCourse() ? '' : '<a onclick="go(\'library\')">📚 المقررات</a>·') + (st.allowJoin !== 'لا' && !onlyCourse() && role() !== 'طالب' ? '<a onclick="go(\'join\')">🚀 اطلب منصتك</a>·' : '') + '<a onclick="feedbackModal()">💬 رأيك يهمنا</a>·<a onclick="go(\'admin\')">لوحة المعلم</a></div>' +
     '<div style="margin-top:6px">تصميم وإعداد/ <b>' + esc(st.teacherName || 'أ. مروان بن عبد الرحمن السويدي') + '</b>' + ZSIG + ' — للتواصل/ ' + esc(st.email || OWNER.email) + '</div><div style="margin-top:4px">' + esc(st.license || '') + '</div>' +
     '<div style="color:var(--bg);font-size:1px;line-height:1px;user-select:text" aria-hidden="true">© ' + OWNER.year + ' ' + OWNER.name + ' · ' + OWNER.en + ' · ' + OWNER.id + '</div></footer>';
 }
@@ -1457,6 +1477,7 @@ function newHome() {
     var mx = Math.max.apply(null, S.b.board.map(function (b) { return b.n; })) || 1;
     h += '<div class="secthead"><h2>🏫 أنشط الشعب هذا الأسبوع</h2></div><div class="panel">' + S.b.board.map(function (b, i) { return '<div class="boardrow"><b>' + (i === 0 && b.n ? '🥇 ' : '') + esc(b.name) + '</b><div class="bar sp"><i style="width:' + Math.round(b.n / mx * 100) + '%"></i></div><span class="mut">' + b.n + '</span></div>'; }).join('') + '</div>';
   }
+  if ((r === 'زائر' || r === 'معلم') && st.allowJoin !== 'لا' && !onlyCourse()) h += '<div class="joinbanner" role="button" tabindex="0" onclick="go(\'join\')"><span class="ji">🚀</span><div class="sp"><b>معلم في مدرسة أخرى؟ أنشئ منصة مثل هذه لمادتك</b><small>مجانًا — لأي مادة وأي صف، بمساعدة الذكاء الاصطناعي</small></div><span style="font-size:1.5rem">←</span></div>';
   if (r === 'زائر' || r === 'معلم') h += whyHtml();
   return h;
 }
@@ -1637,9 +1658,9 @@ setRole = function (r) { _setRole9(r); render(); };
 var _header9 = header;
 header = function () {
   var h = _header9(), r = role(), st = (S.b && S.b.settings) || {};
-  h = h.replace(/<button class="rolechip"[^>]*>[^<]*<\/button>/, r && S.page.indexOf('a_') !== 0 ? '<button class="rolechip" onclick="roleModal()" title="غيّر طريقة العرض">' + ROLE_ICON[r] + ' أتصفح كـ: ' + esc(roleLabel(r)) + ' ▾</button>' : '');
+  h = h.replace(/<button class="rolechip"[^>]*>[^<]*<\/button>/, r && S.page.indexOf('a_') !== 0 ? '<button class="rolechip" onclick="roleModal()" title="غيّر طريقة العرض">' + ROLE_ICON[r] + ' <span class="rcl">أتصفح كـ:</span> ' + esc(roleLabel(r)) + ' ▾</button>' : '');
   if (st.allowJoin !== 'لا' && r !== 'طالب' && !onlyCourse() && S.page.indexOf('a_') !== 0 && S.page !== 'join')
-    h = h.replace('<button class="icobtn" title="أوسمتي"', '<button class="joinbtn" onclick="go(\'join\')" title="للمعلم: أنشئ منصة مثل هذه لمادتك">🚀 <span>اطلب منصتك</span></button><button class="icobtn" title="أوسمتي"');
+    h = h.replace('<button class="icobtn" title="أوسمتي"', '<button class="joinbtn" onclick="go(\'join\')" title="للمعلم: أنشئ منصة مثل هذه لمادتك">🚀 <span>اطلب منصتك</span><small>منصتك</small></button><button class="icobtn" title="أوسمتي"');
   return h;
 };
 
@@ -2837,7 +2858,7 @@ function bnavItems() {
   var home = ['home', '🏠', 'الرئيسية', 'navHome()'], les = ['lessons', '📖', 'الدروس', "go('lessons')"], crs = ['library', '📚', 'المقررات', "goCourses()"];
   var jr = ['journey', '🧭', 'رحلة اليوم', wid ? "startJourney('" + wid + "')" : "go('lessons')"];
   if (r === 'ولي أمر') return [home, les, ['lesson', '🏠', 'للأسرة', wid ? "openLesson('" + wid + "','family')" : "go('lessons')"], ['wsheet', '📝', 'الأوراق', wid ? "openLesson('" + wid + "','sheets')" : "go('lessons')"], crs];
-  if (r === 'معلم') return [home, les, ['lesson', '📋', 'أدوات الحصة', wid ? "openLesson('" + wid + "','teacher')" : "go('lessons')"], ['impact', '📈', 'الأثر', "go('impact')"], crs];
+  if (r === 'معلم') return [home, les, ['lesson', '📋', 'الحصة', wid ? "openLesson('" + wid + "','teacher')" : "go('lessons')"], ['impact', '📈', 'الأثر', "go('impact')"], crs];
   if (r === 'طالب') return [home, les, jr, ['mybadges', '🏅', 'إنجازاتي', "go('mybadges')"], crs];
   return [home, les, jr, ['impact', '📈', 'الأثر', "go('impact')"], crs];
 }
@@ -2873,19 +2894,23 @@ portalCourses = function () {
 };
 var ST = null;
 function startFlow(step) {
-  ST = { step: step || 1, role: role() || '', grades: myGrades().slice() };
+  ST = { step: step || 1, role: role() || '', grades: myGrades().slice(), from: step || 1 };
   if (ST.step >= 2 && !ST.role) ST.step = 1;
-  sset('lab_go', null); go('start', {}, true);
+  if (started()) sset('lab_go_prev', '1'); sset('lab_go', null); go('start', {}, true);
 }
 PP.start = function () {
   if (!ST) ST = { step: 1, role: role() || '', grades: myGrades().slice() };
   var st = S.b.settings, AG = availGrades(), multi = ST.role && ST.role !== 'طالب';
-  if (ST.step === 2 && AG.length <= 1) { ST.grades = AG.slice(); ST.step = 3; }
+  if (ST.step === 2 && AG.length <= 1) { ST.grades = AG.slice(); ST.step = ST.back ? 1 : 3; ST.back = false; }
   var lastK = ls('lab_course'), lastC = lastK && allCourses().filter(function (k) { return k.id === lastK; })[0];
   var stepper = '<div class="sflow">' + [['١', 'صفتك'], ['٢', 'الصف'], ['٣', 'المقرر']].map(function (x, i) { var n = i + 1; return '<div class="sfs ' + (n < ST.step ? 'done' : n === ST.step ? 'now' : '') + '" ' + (n < ST.step ? 'onclick="ST.step=' + n + ';render()"' : '') + '><i>' + (n < ST.step ? '✓' : x[0]) + '</i><span>' + x[1] + '</span></div>'; }).join('<b></b>') + '</div>';
   var h = '<div class="starth">' + rayLogo() + '<h1>مرحبًا بك في ' + esc(st.platformName) + ' 👋</h1><p class="mut">' + esc(st.subtitle || '') + '</p></div>';
+  if (ST.step === 1 && S.cb && sget('lab_go_prev')) h += '<button class="backbtn sback" onclick="sset(\'lab_go\',\'1\');ST=null;go(\'home\',{},true)"><span>→</span> رجوع إلى ' + esc(S.cb.course.subject || 'المقرر') + '</button>';
   if (ST.step === 1 && lastC && role()) h += '<button class="resume" onclick="resumeLast()"><span>↩</span><div class="sp"><b>تابع حيث توقفت</b><small>' + ROLE_ICON[role()] + ' ' + esc(roleLabel(role())) + ' · ' + esc(lastC.icon || '') + ' ' + esc(lastC.subject) + ' — ' + esc(lastC.grade || '') + '</small></div><span>←</span></button>';
   h += stepper;
+  if (ST.step > 1 && S.cb && sget('lab_go_prev') && ST.from) h += '<button class="backbtn sback" onclick="sset(\'lab_go\',\'1\');ST=null;go(\'home\',{},true)"><span>→</span> رجوع إلى ' + esc(S.cb.course.subject || 'المقرر') + '</button>';
+  else if (ST.step > 1) h += '<button class="backbtn sback" onclick="ST.step--;ST.back=true;render()"><span>→</span> رجوع' + (ST.step === 2 ? ' لاختيار الصفة' : (AG.length <= 1 ? ' لاختيار الصفة' : ' لاختيار الصف')) + '</button>';
+  else if (S.cb && started() === false && sget('lab_seen')) h += '';
   if (ST.step === 1) {
     h += '<h2 class="sq">من أنت؟</h2><div class="rggrid big">' + [['طالب', '🎒', 'أتعلّم وأراجع وألعب'], ['ولي أمر', '🏠', 'أتابع أبنائي وأساعدهم'], ['معلم', '📋', 'أدوات الحصة والأوراق'], ['زائر', '🔭', 'أستكشف المنصة']].map(function (x) { return '<button class="rgo ' + (ST.role === x[0] ? 'on' : '') + '" onclick="ST.role=\'' + x[0] + '\';ST.grades=' + (x[0] === 'طالب' ? '(ST.grades.length===1?ST.grades:[])' : 'ST.grades') + ';ST.step=2;render()"><span>' + x[1] + '</span><b>' + (x[0] === 'زائر' ? 'زائر' : 'أنا ' + x[0]) + '</b><small>' + x[2] + '</small></button>'; }).join('') + '</div>';
   } else if (ST.step === 2) {
@@ -2906,6 +2931,7 @@ function toggleGrade(g) {
   var i = ST.grades.indexOf(g); if (i >= 0) ST.grades.splice(i, 1); else ST.grades.push(g); render();
 }
 function finishStart(id) {
+  sset('lab_go_prev', null);
   ls('lab_grades', JSON.stringify(ST.grades)); sset('lab_go', '1'); ls('lab_kpick', '1');
   var r = ST.role; ST = null;
   if (r !== role()) { ls('lab_role', r); track({ type: 'visit', extra: { roleSet: r } }); }
@@ -2928,7 +2954,7 @@ bnavHtml = function () { return S.page === 'start' ? '' : _bnav11(); };
 var _header11 = header;
 header = function () { var h = _header11(); return S.page === 'start' ? h.replace(/<button class="rolechip"[\s\S]*?<\/button>/, '') : h; };
 var _render11 = render;
-render = function () { _render11(); if (S.page === 'start') { var b = document.querySelector('.backbtn'); if (b) b.remove(); } };
+render = function () { _render11(); if (S.page === 'start') { var b = document.querySelector('.backbtn:not(.sback)'); if (b) b.remove(); } };
 
 (function () { try { var t = sessionStorage.getItem('lab_adm'); if (t) { call('aData', { token: t }, true).then(function (d) { S.adm = { token: t, data: d }; }).catch(function () { sessionStorage.removeItem('lab_adm'); }); } } catch (e) {} })();
 try { boot(); } catch (e) { showFatal('boot: ' + (e && e.message)); }

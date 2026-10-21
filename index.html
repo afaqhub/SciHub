@@ -459,6 +459,20 @@ header.top .title{white-space:nowrap}
 .joinbanner{display:flex;align-items:center;gap:12px;border-radius:22px;padding:14px 16px;margin:14px 0;cursor:pointer;color:#fff;background:linear-gradient(120deg,#f59e0b,#ef4444);box-shadow:0 16px 30px -18px #ef4444;transition:transform .2s}
 .joinbanner:hover{transform:translateY(-3px)}.joinbanner .ji{font-size:2rem;width:54px;height:54px;border-radius:16px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}.joinbanner b{display:block;font-size:1.02rem}.joinbanner small{opacity:.92}
 .sback{margin:4px 0 0}
+/* ── الإصدار ١٣ ── */
+@media(max-width:560px){.joinbtn{flex-direction:row;gap:4px;padding:7px 10px;border-radius:999px;font-size:.7rem}.joinbtn span{display:inline}.joinbtn small{display:none}}
+@media(max-width:380px){.top .title{display:none}}
+.kbar{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:8px 10px;margin-bottom:14px;box-shadow:var(--sh)}
+.kbi{font-size:1.5rem;width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--p) 12%,transparent);flex-shrink:0}
+.kbt{flex:1;min-width:0}.kbt b{display:block;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kbt small{display:block;color:var(--mut);font-size:.74rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kbb{font-family:inherit;flex-shrink:0;border:0;border-radius:999px;padding:8px 12px;font-weight:800;font-size:.8rem;cursor:pointer;background:var(--p);color:#fff;box-shadow:0 8px 16px -10px var(--p);transition:transform .15s}
+.kbb.sec{background:color-mix(in srgb,var(--p) 12%,var(--card));color:var(--p);box-shadow:none}.kbb:hover{transform:translateY(-2px)}
+@media(max-width:420px){.kbb span{display:none}.kbb{padding:8px 10px}}
+#totop{position:fixed;z-index:61;left:14px;bottom:calc(100px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:50%;border:0;background:var(--p);color:#fff;font-size:1.4rem;font-weight:800;cursor:pointer;box-shadow:0 10px 24px -10px var(--p);opacity:0;transform:translateY(16px) scale(.8);pointer-events:none;transition:all .25s}
+#totop.on{opacity:1;transform:none;pointer-events:auto}
+body:not(:has(.bnav)) #totop{bottom:calc(20px + env(safe-area-inset-bottom))}
+@media(min-width:901px){body:has(.bnav.adm) #totop{bottom:24px}}
+@media print{#totop{display:none}}
 </style>
 </head>
 <body>
@@ -2935,7 +2949,7 @@ function finishStart(id) {
   ls('lab_grades', JSON.stringify(ST.grades)); sset('lab_go', '1'); ls('lab_kpick', '1');
   var r = ST.role; ST = null;
   if (r !== role()) { ls('lab_role', r); track({ type: 'visit', extra: { roleSet: r } }); }
-  loadCourse(id).then(function () { S.hist = []; go('home', {}, true); toast(ROLE_ICON[r] + ' أهلًا بك — ' + esc(courseLabel())); });
+  loadCourse(id).then(function () { S.hist = []; go('home', {}, true); toast(ROLE_ICON[r] + ' أهلًا بك 👋'); });
 }
 function resumeLast() { var id = ls('lab_course'); ST = { role: role(), grades: myGrades() }; finishStart(id); }
 
@@ -2955,6 +2969,24 @@ var _header11 = header;
 header = function () { var h = _header11(); return S.page === 'start' ? h.replace(/<button class="rolechip"[\s\S]*?<\/button>/, '') : h; };
 var _render11 = render;
 render = function () { _render11(); if (S.page === 'start') { var b = document.querySelector('.backbtn:not(.sback)'); if (b) b.remove(); } };
+
+/* ---------- الإصدار ١٣: شريط المقرر البارز + زر الصعود للأعلى ---------- */
+function courseBarHtml() {
+  if (!S.cb || ['home', 'lessons', 'lesson', 'mybadges', 'impact', 'wsheet'].indexOf(S.page) < 0 || onlyCourse()) return '';
+  var k = S.cb.course, G = myGrades(), many = availGrades().length > 1;
+  return '<div class="kbar noprint"><span class="kbi">' + esc(k.icon || '📘') + '</span><div class="kbt"><b>' + esc(k.subject || '') + '</b><small>' + esc(k.grade || '') + (k.term ? ' · ' + esc(k.term) : '') + '</small></div>' +
+    '<button class="kbb" onclick="startFlow(3)">⇄ <span>تغيير </span>المقرر</button>' + (many ? '<button class="kbb sec" onclick="startFlow(2)">🎓 <span>تغيير </span>الصف</button>' : '') + '</div>';
+}
+var _render13 = render;
+render = function () {
+  _render13();
+  var mn = document.querySelector('#app main');
+  if (mn && S.page.indexOf('a_') !== 0) { var kb = courseBarHtml(); if (kb) mn.insertAdjacentHTML('afterbegin', kb); }
+  if (!$('totop')) { var b = document.createElement('button'); b.id = 'totop'; b.className = 'noprint'; b.setAttribute('aria-label', 'الصعود إلى الأعلى'); b.title = 'إلى الأعلى'; b.innerHTML = '↑'; b.onclick = function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }; document.body.appendChild(b); }
+  onScrollTop();
+};
+function onScrollTop() { var b = $('totop'); if (b) b.classList.toggle('on', (window.scrollY || document.documentElement.scrollTop) > 500); }
+window.addEventListener('scroll', onScrollTop, { passive: true });
 
 (function () { try { var t = sessionStorage.getItem('lab_adm'); if (t) { call('aData', { token: t }, true).then(function (d) { S.adm = { token: t, data: d }; }).catch(function () { sessionStorage.removeItem('lab_adm'); }); } } catch (e) {} })();
 try { boot(); } catch (e) { showFatal('boot: ' + (e && e.message)); }

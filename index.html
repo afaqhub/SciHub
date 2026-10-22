@@ -543,6 +543,28 @@ body.fx-bad:after{box-shadow:inset 0 0 0 6px rgba(225,29,72,.55),inset 0 0 60px 
 @keyframes spop{from{transform:scale(.4);opacity:0}}@keyframes spin3{from{transform:rotate(-180deg) scale(.3)}}
 .wsid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;background:color-mix(in srgb,var(--p) 7%,var(--card));border:1px dashed color-mix(in srgb,var(--p) 35%,transparent);border-radius:14px;padding:8px 12px;margin-bottom:10px;font-size:.88rem}
 
+/* ── الإصدار ١٧ ── */
+main.wide>.backbtn{display:inline-flex!important;justify-self:start;width:auto}
+.tbar2{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;background:linear-gradient(120deg,color-mix(in srgb,var(--p) 14%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--p) 30%,transparent);border-radius:16px;padding:8px 12px;margin-bottom:12px;font-size:.9rem}
+.khead{display:flex;flex-wrap:wrap;align-items:center;gap:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--c) 30%,transparent);border-top:6px solid var(--c);border-radius:24px;padding:18px 20px;margin-bottom:12px;box-shadow:var(--sh)}
+.khead h1{margin:0;font-size:1.7rem}.khact{display:flex;flex-wrap:wrap;gap:8px}
+.kstrip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:12px}
+.kstrip>div{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:10px 12px;font-size:.82rem;color:var(--mut);text-align:center}.kstrip b{display:block;font-size:1.5rem;color:var(--tx)}
+.kstrip .warnc{cursor:pointer;border-color:#f59e0b;background:color-mix(in srgb,#f59e0b 10%,var(--card));color:#92400e}
+.wkcard{border:2px solid color-mix(in srgb,#f59e0b 45%,transparent);background:color-mix(in srgb,#f59e0b 6%,var(--card))}.wkcard .row{flex-wrap:wrap}
+.ugroup{margin-bottom:14px}.ulabel{font-weight:800;color:var(--mut);font-size:.85rem;margin:4px 6px 8px}
+.lrow{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:10px 12px;margin-bottom:8px;transition:border-color .2s}.lrow:hover{border-color:var(--p)}
+.lrow.wk{border:2px solid #f59e0b}.lri{font-size:1.5rem;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--p) 10%,transparent);flex-shrink:0}
+.lchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.lchips span{font-size:.74rem;font-weight:700;background:var(--bg);border-radius:99px;padding:2px 9px}.lchips .z{opacity:.5}.lchips .okc{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}.lchips .wc{background:#fef3c7;color:#92400e}
+.lact{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}.lact button{font-family:inherit;border:1px solid var(--bd);background:var(--card);border-radius:12px;min-width:40px;height:40px;cursor:pointer;font-size:1rem;color:var(--tx);padding:0 8px}.lact button:hover{border-color:var(--p);background:color-mix(in srgb,var(--p) 8%,var(--card))}.lact .okb{border-color:var(--ok);color:var(--ok);font-weight:800}
+.pend{border:2px solid color-mix(in srgb,#0ea5e9 45%,transparent)}
+@media(max-width:560px){.lrow{flex-wrap:wrap}.lact{width:100%;justify-content:flex-start}.khead h1{font-size:1.35rem}}
+
+@media(max-width:620px){.wkcard .row>.sp{flex-basis:calc(100% - 52px);min-width:0}.wkcard select{flex:1 1 100%;width:100%!important}.wkcard .row>.btn{flex:1}}
+.contk{display:flex;flex-wrap:wrap;align-items:center;gap:14px;cursor:pointer;border-radius:24px;padding:18px 20px;margin-bottom:14px;background:linear-gradient(130deg,color-mix(in srgb,var(--c) 18%,var(--card)),var(--card));border:2px solid color-mix(in srgb,var(--c) 40%,transparent);box-shadow:var(--sh);transition:transform .2s}
+.contk:hover{transform:translateY(-3px)}.contk small{display:block;color:var(--mut);font-weight:700}.contk b{display:block;font-size:1.25rem}.contk em{display:block;font-style:normal;color:var(--mut);font-size:.82rem}
+.contgo{background:var(--c);color:#fff;font-weight:800;border-radius:999px;padding:10px 16px;white-space:nowrap}
+@media(max-width:560px){.contgo{width:100%;text-align:center}}
 </style>
 </head>
 <body>
@@ -2081,12 +2103,12 @@ AP.a_settings = function () {
   if (admGuard()) return '';
   if (!canA('settings') && !ME().owner) return admBar() + empty('ليست لديك صلاحية');
   var St = D().settings, defs = {}; D().defaults.forEach(function (d) { defs[d[0]] = d; });
-  var G = [['🏫 المنصة والمدرسة', ['platformName', 'subtitle', 'schoolName', 'teacherName', 'email']], ['🏠 الصفحة العامة', ['portalMode', 'welcome', 'showBoard', 'showCounters', 'showImpact', 'sections']], ['📝 أوراق العمل', ['wsFont', 'wsFontSize', 'wsMcq', 'wsDirect', 'wsOrder', 'wsLines', 'wsTitle', 'wsAnswerKey']], ['🚀 «اطلب منصتك»', ['allowJoin', 'kitUrl', 'autoApprove']], ['🎨 الألوان', ['primaryColor', 'accentColor']], ['🔧 متقدم', ['siteUrl', 'hubUrl', 'license']]];
+  var G = [['🏫 المنصة والمدرسة', ['platformName', 'subtitle', 'schoolName', 'teacherName', 'email']], ['🏠 الصفحة العامة', ['portalMode', 'welcome', 'showBoard', 'showCounters', 'showImpact', 'sections']], ['📝 أوراق العمل', ['wsFont', 'wsFontSize', 'wsMcq', 'wsDirect', 'wsOrder', 'wsLines', 'wsTitle', 'wsAnswerKey']], ['🚀 «اطلب منصتك» والتسجيل', ['allowJoin', 'kitUrl', 'autoApprove', 'allowSignup', 'signupAuto']], ['🎨 الألوان', ['primaryColor', 'accentColor']], ['🔧 متقدم', ['siteUrl', 'hubUrl', 'license']]];
   var field = function (k) {
     var d = defs[k]; if (!d) return '';
     var v = St[k] == null ? '' : St[k], inp;
     if (/Color$/.test(k)) inp = '<input type="color" data-k="' + k + '" value="' + esc(v) + '" style="height:44px">';
-    else if (/^show|wsAnswerKey|allowJoin|autoApprove/.test(k)) inp = '<select data-k="' + k + '"><option' + (v !== 'لا' ? ' selected' : '') + '>نعم</option><option' + (v === 'لا' ? ' selected' : '') + '>لا</option></select>';
+    else if (/^show|wsAnswerKey|allowJoin|autoApprove|allowSignup|signupAuto/.test(k)) inp = '<select data-k="' + k + '"><option' + (v !== 'لا' ? ' selected' : '') + '>نعم</option><option' + (v === 'لا' ? ' selected' : '') + '>لا</option></select>';
     else if (k === 'portalMode') inp = '<select data-k="' + k + '">' + ['عامة وخاصة', 'عامة فقط', 'روابط خاصة فقط'].map(function (x) { return '<option' + (v === x || (!v && x === 'عامة وخاصة') ? ' selected' : '') + '>' + x + '</option>'; }).join('') + '</select><div class="mut" style="font-size:.74rem">«عامة»: صفحة تجمع المقررات الظاهرة · «خاصة»: رابط لكل مقرر</div>';
     else if (k === 'wsFont') inp = '<select data-k="' + k + '">' + ['Cairo', 'Amiri', 'Noto Naskh Arabic', 'Tajawal'].map(function (x) { return '<option' + (v === x ? ' selected' : '') + '>' + x + '</option>'; }).join('') + '</select>';
     else if (k === 'wsOrder') inp = '<select data-k="' + k + '"><option' + (v !== 'بالترتيب' ? ' selected' : '') + '>عشوائي</option><option' + (v === 'بالترتيب' ? ' selected' : '') + '>بالترتيب</option></select>';
@@ -2097,7 +2119,7 @@ AP.a_settings = function () {
   };
   return admBar() + G.map(function (g) { return '<details class="card" ' + (g[0].indexOf('المنصة والمدرسة') >= 0 ? 'open' : '') + '><summary style="cursor:pointer;font-weight:800">' + g[0] + '</summary><div class="grid2" style="margin-top:10px">' + g[1].map(field).join('') + '</div></details>'; }).join('') +
     '<button class="btn big" onclick="var m={};document.querySelectorAll(\'[data-k]\').forEach(function(x){m[x.getAttribute(\'data-k\')]=x.value});admCall(\'aSaveSettings\',{map:m},\'حُفظت ✅ — تظهر للزوار خلال دقائق\')">💾 حفظ كل الإعدادات</button>' +
-    (!ME().owner ? '' : '<div class="card"><h3>🔐 تغيير كلمة مرور المالك</h3>' + (D().defaultPassword ? '<div class="pill bad">ما زالت كلمة المرور الافتراضية — غيّرها الآن</div>' : '') + '<label class="f">الحالية</label><input id="pw0" type="password"><label class="f">الجديدة (٦ أحرف فأكثر)</label><input id="pw1" type="password"><button class="btn" onclick="admCall(\'aPassword\',{old:$(\'pw0\').value,password:$(\'pw1\').value},\'تم تغيير كلمة المرور ✅\')">تغيير</button><div class="mut">تُحفظ في خصائص المشروع السرية — لا في الجدول ولا في GitHub</div></div>');
+    (!ME().owner ? '' : '<div class="card"><h3>🔐 تغيير كلمة مرور المالك</h3>' + (D().defaultPassword ? '<div class="pill bad">ما زالت كلمة المرور الافتراضية — غيّرها الآن</div>' : '') + '<label class="f">الحالية</label><input id="pw0" type="password"><label class="f">الجديدة (٤ أحرف أو أرقام فأكثر)</label><input id="pw1" type="password"><button class="btn" onclick="admCall(\'aPassword\',{old:$(\'pw0\').value,password:$(\'pw1\').value},\'تم تغيير كلمة المرور ✅\')">تغيير</button><div class="mut">تُحفظ في خصائص المشروع السرية — لا في الجدول ولا في GitHub</div></div>');
 };
 
 /* ---------- تقرير الأثر ---------- */
@@ -3463,6 +3485,175 @@ saveCourse = function (id) {
   var gn = $('k_gn').value, sub = $('k_s').value || SUBJECTS[$('k_sk').value].name;
   var d = { token: S.adm.token, id: id || undefined, subject: sub, subjectKey: $('k_sk').value, gradeNo: gn, grade: GRADES[gn].name, term: $('k_t').value, year: $('k_y').value, icon: $('k_i').value, color: $('k_c').value, title: $('k_ti').value, status: $('k_st').value, order: ($('k_o2') || {}).value, meta: JSON.stringify(m) };
   call('aSaveCourse', d).then(function (r) { S.adm.data = r.data; S.ac = r.id; closeModal(); toast('حُفظ المقرر ✅'); if (!id) go('a_wizard', {}, true); else render(); }).catch(function (e) { toast(e, 'err'); });
+};
+
+/* ════════════ الإصدار ١٧: مساحة المقرر، تحدٍّ لكل درس، شريط المعلم، التسجيل، الرجوع ════════════ */
+
+/* ---------- (١) تحدٍّ لكل درس — للطالب ---------- */
+function chOf(lessonId) { return ((S.cb && S.cb.challenges) || []).filter(function (c) { return c.lesson === lessonId; })[0] || null; }
+function weekChallenge() { var wl = S.cb ? weekLesson() : null; return (wl && chOf(wl.id)) || (((S.cb && S.cb.challenges) || [])[0]) || null; }
+var _chal17 = challengeHtml;
+challengeHtml = function (ch) { var l = lessonById(ch.lesson); return (l ? '<div class="mut" style="margin:-4px 0 8px">📘 تحدي درس «' + esc(l.name) + '»</div>' : '') + _chal17(ch).replace(/answerCh\(/g, 'answerChX(\'' + ch.id + '\','); };
+function answerChX(id, j) { var all = (S.cb && S.cb.challenges) || [], ch = all.filter(function (c) { return c.id === id; })[0]; if (ch) S.b.challenge = ch; answerCh(j); }
+var _home17 = PP.home;
+PP.home = function () { if (S.b && S.cb) S.b.challenge = weekChallenge(); return _home17(); };
+var _les17 = PP.lesson;
+PP.lesson = function (p) {
+  var h = _les17(p), ch = chOf(p.id), tab = p.tab || '';
+  if (ch && (!tab || tab === 'learn') && role() !== 'معلم') { S.b.challenge = ch; h = h.replace('<div data-read>', '<div class="secthead" style="margin-top:0"><h2>🏆 تحدي هذا الدرس</h2></div>' + challengeHtml(ch) + '<div data-read>'); }
+  return h;
+};
+
+/* ---------- (٢) شريط المعلم أثناء تصفح المنصة + خروج نظيف ---------- */
+var _render17 = render;
+render = function () {
+  _render17();
+  var mn = document.querySelector('#app main');
+  if (mn && S.adm && S.page.indexOf('a_') !== 0 && S.page !== 'admin' && S.page !== 'loggedout') {
+    var me = ME();
+    mn.insertAdjacentHTML('afterbegin', '<div class="tbar2 noprint"><span>' + (me.owner ? '👑' : '🔑') + ' <b>' + esc(me.name || 'المعلم') + '</b> <small>— تتصفح المنصة</small></span><div class="row" style="gap:6px"><button class="btn sm sec" onclick="roleModal()">🔄 تصفّح كـ</button><button class="btn sm" onclick="go(\'a_home\')">🛠️ لوحتي</button></div></div>');
+  }
+};
+admLogout = function () {
+  var m = $('modal'); if (m) { m.classList.remove('locked', 'on'); var b = $('mbody'); if (b) b.innerHTML = ''; }
+  S.adm = null; try { sessionStorage.removeItem('lab_adm'); } catch (e) {}
+  USERS = null; INBOX = null; REQS = null; MYWS = null; LOGD = null; STATS = null; ABANK = null;
+  S.hist = []; go('loggedout', {}, true);
+};
+/* «معاينة المنصة» تفتح في الصفحة نفسها مع بقاء الدخول */
+var _admBar17 = admBar;
+admBar = function () { return _admBar17().replace("window.open(location.pathname,'_blank')", "go('home')").replace(/go\('(a_[a-z_]+)',\{\},true\)/g, "go('$1',{})"); };
+var _bnav17 = bnavHtml;
+bnavHtml = function () { return _bnav17().replace(/go\('(a_[a-z_]+)',\{\},true\)/g, "go('$1',{})"); };
+
+/* ---------- (٣) مساحة المقرر: كل ما يخص المقرر في صفحة واحدة ---------- */
+function lessonStats(l) {
+  var C = D().content.filter(function (c) { return c.lesson === l.id && c.status !== 'مؤرشف'; });
+  var Q = (ABANK || []).filter(function (x) { return x.lesson === l.id && x.status !== 'مؤرشف'; });
+  var ch = D().challenges.filter(function (c) { return c.lesson === l.id && c.status === 'منشور'; }).pop();
+  return { content: C.filter(function (c) { return c.status === 'منشور'; }).length, pending: C.filter(function (c) { return c.status === 'مراجعة'; }).length, q: Q.length, ch: ch };
+}
+function courseWeekId(k) { var L = D().lessons.filter(function (l) { return l.course === k.id && l.status !== 'مؤرشف'; }); return schedLesson(k, L) || k.weekLesson || ''; }
+AP.a_course = function (p) {
+  if (admGuard()) return '';
+  var id = p.id || AC(), k = D().courses.filter(function (x) { return x.id === id; })[0];
+  if (!k) return admBar() + empty('المقرر غير موجود');
+  S.ac = id;
+  if (!ABANK) { afterRender = function () { call('aBank', { token: S.adm.token }, true).then(function (d) { ABANK = d.items; render(); }).catch(function () { ABANK = []; render(); }); }; }
+  var E = canA('content', 2), EL = canA('lessons', 2) || canA('courses', 2), s = courseStats(k), wk = courseWeekId(k);
+  var L = D().lessons.filter(function (l) { return l.course === id && l.status !== 'مؤرشف'; }).sort(function (a, b) { return N(a.order) - N(b.order); });
+  var units = [], by = {}; L.forEach(function (l) { var u = l.unit || 'الدروس'; if (!by[u]) { by[u] = []; units.push(u); } by[u].push(l); });
+  var st = { 'منشور': ['ok', '👁️ ظاهر للطلاب'], 'مسودة': ['warn', '🙈 مخفي'], 'أرشيف': ['', '🗄️ أرشيف'] }[k.status] || ['', k.status];
+  var h = admBar() + '<div class="khead" style="--c:' + esc(k.color || '#5b4be1') + '"><span class="kic">' + esc(k.icon || '📘') + '</span><div class="sp"><h1>' + esc(k.subject || k.title) + '</h1><div class="mut">' + esc(k.grade || '') + ' · ' + esc(k.term || '') + (k.year ? ' · ' + esc(k.year) : '') + ' <span class="pill ' + st[0] + '">' + st[1] + '</span></div></div>' +
+    '<div class="khact">' + (E ? '<button class="btn" onclick="S.ac=\'' + id + '\';go(\'a_wizard\',{})">⚡ بناء المحتوى</button>' : '') + '<button class="btn sec" onclick="courseLinks(\'' + id + '\')">🔗 الروابط</button>' + (canA('courses', 2) ? '<button class="btn sec" onclick="courseMenu(\'' + id + '\')">⋯ المزيد</button>' : '') + '</div></div>' +
+    '<div class="kstrip"><div><b>' + s.lessons + '</b>درسًا</div><div><b>' + s.content + '</b>موردًا منشورًا</div><div><b>' + s.questions + '</b>سؤالًا</div><div><b>' + s.pct + '%</b>اكتمال</div>' + (s.pending ? '<div class="warnc" onclick="S.ac=\'' + id + '\';go(\'a_review\',{})"><b>' + s.pending + '</b>بانتظار مراجعتك ←</div>' : '') + '</div>';
+  /* درس الأسبوع */
+  var wl = L.filter(function (l) { return l.id === wk; })[0];
+  h += '<div class="card wkcard"><div class="row"><span style="font-size:2rem">📌</span><div class="sp"><div class="mut">درس هذا الأسبوع — يبدأ منه الطالب</div><b style="font-size:1.15rem">' + (wl ? esc(wl.icon || '') + ' ' + esc(wl.name) : 'لم يُحدَّد') + '</b></div>' +
+    (EL ? '<select id="wkSel" style="width:auto;margin:0">' + L.map(function (l) { return '<option value="' + l.id + '"' + (l.id === wk ? ' selected' : '') + '>' + esc(l.name) + '</option>'; }).join('') + '</select><button class="btn sm" onclick="setWeek(\'' + id + '\',$(\'wkSel\').value)">⭐ اعتمده</button><button class="btn sm sec" onclick="S.ac=\'' + id + '\';go(\'a_schedule\',{})">🗓️ الجدول</button>' : '') + '</div></div>';
+  /* الدروس */
+  h += '<div class="secthead"><h2>📖 الدروس (' + L.length + ')</h2>' + (EL ? '<a onclick="S.ac=\'' + id + '\';lessonModal()">➕ درس جديد</a>' : '') + '</div>';
+  if (!L.length) h += '<div class="card" style="text-align:center">لا دروس بعد<br><button class="btn" style="margin-top:10px" onclick="S.ac=\'' + id + '\';go(\'a_wizard\',{})">⚡ ابنِ الدروس من فهرس الكتاب</button></div>';
+  h += units.map(function (u) {
+    return '<div class="ugroup"><div class="ulabel">' + esc(u) + '</div>' + by[u].map(function (l) {
+      var x = lessonStats(l), isW = l.id === wk;
+      return '<div class="lrow' + (isW ? ' wk' : '') + '"><span class="lri">' + esc(l.icon || '📘') + '</span><div class="sp" style="min-width:0"><b>' + esc(l.name) + (isW ? ' <span class="pill" style="background:#fde68a;color:#92400e;border:0">⭐ درس الأسبوع</span>' : '') + '</b>' +
+        '<div class="lchips"><span class="' + (x.content ? '' : 'z') + '">🧩 ' + x.content + ' موارد</span><span class="' + (x.q ? '' : 'z') + '">🗂️ ' + (ABANK ? x.q : '…') + ' سؤالًا</span><span class="' + (x.ch ? 'okc' : 'z') + '">🏆 ' + (x.ch ? 'تحدٍّ فعّال' : 'بلا تحدٍّ') + '</span>' + (x.pending ? '<span class="wc">✅ ' + x.pending + ' للمراجعة</span>' : '') + '</div></div>' +
+        '<div class="lact">' + (EL && !isW ? '<button title="اجعله درس الأسبوع" onclick="setWeek(\'' + id + '\',\'' + l.id + '\')">⭐</button>' : '') + (E ? '<button title="المحتوى" onclick="S.ac=\'' + id + '\';go(\'a_content\',{lesson:\'' + l.id + '\'})">🧩</button>' : '') + (canA('bank') ? '<button title="الأسئلة" onclick="S.ac=\'' + id + '\';go(\'a_bank\',{lesson:\'' + l.id + '\'})">🗂️</button>' : '') + (canA('challenges', 2) ? '<button title="تحدي الدرس" onclick="chModal(\'' + l.id + '\')">🏆</button>' : '') + (EL ? '<button title="تعديل" onclick="S.ac=\'' + id + '\';lessonModal(\'' + l.id + '\')">✏️</button>' : '') + '<button title="معاينة كما يراه الطالب" onclick="previewLesson(\'' + id + '\',\'' + l.id + '\')">👁️</button></div></div>';
+    }).join('') + '</div>';
+  }).join('');
+  return h;
+};
+function setWeek(cid, lid) {
+  var l = D().lessons.filter(function (x) { return x.id === lid; })[0]; if (!l) return;
+  var k = D().courses.filter(function (x) { return x.id === cid; })[0], m = J(k.meta, {}) || {};
+  if (m.schedule) { var d = new Date(); d.setDate(d.getDate() + (5 - d.getDay() + 7) % 7); m.schedule.pin = { lesson: lid, until: d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) }; return saveCourseMeta(k, m, '⭐ «' + l.name + '» درس هذا الأسبوع'); }
+  admCall('aSaveLesson', { id: lid, course: cid, unit: l.unit, chapter: l.chapter, name: l.name, pages: l.pages, icon: l.icon, order: l.order, status: l.status, week: true }, '⭐ «' + l.name + '» درس هذا الأسبوع');
+}
+function previewLesson(cid, lid) { var go2 = function () { openLesson(lid); }; if (!S.cb || S.cb.course.id !== cid) { var k = allCourses().filter(function (x) { return x.id === cid; })[0]; if (k) return loadCourse(cid).then(go2); return admLoadCourse(cid).then(go2); } go2(); }
+/* كل «فتح» للمقرر يذهب إلى مساحته */
+var _tile17 = courseTile;
+courseTile = function (k, compact) { return _tile17(k, compact).replace("S.ac='" + k.id + "';go('a_content',{},true)", "go('a_course',{id:'" + k.id + "'})"); };
+NAV[0][2].splice(2, 0, ['a_course', '📘', 'مساحة المقرر', null, 'كل ما يخص المقرر في صفحة واحدة: الدروس ودرس الأسبوع والمحتوى والأسئلة والتحديات.']);
+
+/* ---------- (٤) تحدي الأسبوع: لكل درس تحديه ---------- */
+AP.a_challenges = function () {
+  if (admGuard()) return '';
+  if (!ABANK) { afterRender = function () { call('aBank', { token: S.adm.token }, true).then(function (d) { ABANK = d.items; render(); }).catch(function () { ABANK = []; render(); }); }; }
+  var k = acCourse(), L = acLessons().filter(function (l) { return l.status !== 'مؤرشف'; }), E = canA('challenges', 2);
+  return admBar() + courseBar('a_challenges') + '<div class="hero"><h1 style="margin:0">🏆 تحديات الدروس</h1><p class="mut">لكل درس تحدٍّ مستقل: سؤال واحد يظهر للطالب داخل الدرس، وتحدي «درس الأسبوع» يظهر له في الرئيسية. يرى الطالب النتيجة العامة بعد إجابته.</p></div>' +
+    (L.length ? L.map(function (l) {
+      var ch = D().challenges.filter(function (c) { return c.lesson === l.id && c.status === 'منشور'; }).pop();
+      return '<div class="lrow"><span class="lri">' + esc(l.icon || '📘') + '</span><div class="sp" style="min-width:0"><b>' + esc(l.name) + '</b><div class="mut" style="font-size:.85rem">' + (ch ? '🏆 ' + esc(ch.question).slice(0, 90) + (ch.ends ? ' · ينتهي ' + esc(ch.ends.slice(0, 10)) : '') : 'لا يوجد تحدٍّ لهذا الدرس') + '</div></div>' +
+        (E ? '<div class="lact"><button onclick="chModal(\'' + l.id + '\')" title="' + (ch ? 'تحدٍّ جديد بدل الحالي' : 'إضافة تحدٍّ') + '">' + (ch ? '🔄' : '➕') + '</button>' + (ch ? '<button title="إيقاف" onclick="ask(\'إيقاف تحدي هذا الدرس؟\',function(){admCall(\'aArchive\',{sheet:\'التحديات\',id:\'' + ch.id + '\'},\'أُوقف التحدي\')})">⏹</button>' : '') + '</div>' : '') + '</div>';
+    }).join('') : empty('لا دروس في هذا المقرر'));
+};
+function chModal(lid) {
+  var l = D().lessons.filter(function (x) { return x.id === lid; })[0], d = new Date(); d.setDate(d.getDate() + 7);
+  var end = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  modal('<h3>🏆 تحدي درس «' + esc(l.name) + '»</h3><div class="help">اكتب السؤال والخيارات بهذه الصيغة، والنجمة قبل الإجابة الصحيحة:\nما وحدة بناء المخلوق الحي؟ | العضو | *الخلية | النسيج</div><textarea id="chRaw" style="min-height:90px"></textarea><button class="btn sm sec" onclick="chSuggest(\'' + lid + '\')">🎲 اقترح سؤالًا من بنك هذا الدرس</button><label class="f" style="margin-top:10px">ينتهي في</label><input type="date" id="chEnd" value="' + end + '"><div class="row" style="margin-top:10px"><button class="btn" onclick="chSave(\'' + lid + '\')">🚀 نشر التحدي</button><button class="btn sec" onclick="closeModal()">إلغاء</button></div>');
+}
+function chSuggest(lid) {
+  var Q = (ABANK || []).filter(function (x) { return x.lesson === lid && x.kind === 'اختيار' && x.status !== 'مؤرشف'; });
+  if (!Q.length) return toast('لا أسئلة اختيار في بنك هذا الدرس', 'err');
+  var x = Q[Math.floor(Math.random() * Q.length)];
+  $('chRaw').value = x.q + ' | ' + x.options.map(function (o, j) { return (j === x.correct ? '*' : '') + o; }).join(' | ');
+}
+function chSave(lid) { var raw = $('chRaw').value.trim(); if (!raw) return toast('اكتب السؤال', 'err'); admCall('aSaveChallenge', { raw: raw, lesson: lid, ends: $('chEnd').value ? $('chEnd').value + ' 23:59' : '' }, '🏆 نُشر التحدي').then(function () { closeModal(); }); }
+
+/* ---------- (٥) التسجيل الذاتي للمعلمين ---------- */
+PP.signup = function () {
+  var st = S.b.settings;
+  if (st.allowSignup !== 'نعم') return '<div class="card" style="text-align:center">التسجيل مغلق حاليًا.</div>';
+  return '<div class="hero2" style="grid-template-columns:1fr"><div><span class="eyebrow">للمعلمين في المدرسة</span><h1>📝 التسجيل كمعلم في «' + esc(st.platformName) + '»</h1><p>سجّل بياناتك، وبعد موافقة مدير المنصة يصلك بريد بتفعيل حسابك، ثم تدخل من «لوحة المعلم» بكلمة المرور التي تختارها هنا.</p></div></div>' +
+    '<div class="card"><div class="grid2"><div><label class="f">الاسم</label><input id="su_n" placeholder="أ. فلان بن فلان"></div><div><label class="f">البريد الإلكتروني</label><input id="su_e" type="email" dir="ltr"></div><div><label class="f">الجوال (اختياري)</label><input id="su_c" dir="ltr" inputmode="tel"></div><div><label class="f">المدرسة</label><input id="su_s"></div><div><label class="f">المادة التي تدرّسها</label><input id="su_sub"></div><div></div>' +
+    '<div><label class="f">كلمة المرور (٤ أحرف أو أرقام فأكثر)</label><input id="su_p" type="password"></div><div><label class="f">تأكيد كلمة المرور</label><input id="su_p2" type="password"></div></div><button class="btn big" style="margin-top:10px" onclick="sendSignup(this)">📨 إرسال طلب التسجيل</button></div>';
+};
+function sendSignup(btn) {
+  var p = $('su_p').value.trim();
+  if (p.length < 4) return toast('كلمة المرور ٤ أحرف أو أرقام على الأقل', 'err');
+  if (p !== $('su_p2').value.trim()) return toast('كلمتا المرور غير متطابقتين', 'err');
+  btn.disabled = true; btn.textContent = '⏳ جارٍ الإرسال…';
+  call('signup', { device: device(), name: $('su_n').value, email: $('su_e').value, contact: $('su_c').value, school: $('su_s').value, subject: $('su_sub').value, password: p }).then(function (r) {
+    modal('<div style="text-align:center"><div style="font-size:3rem">' + (r.auto ? '🎉' : '📨') + '</div><h3>' + (r.auto ? 'تم تفعيل حسابك' : 'وصل طلبك') + '</h3><div class="mut">' + (r.auto ? 'ادخل الآن من «لوحة المعلم» بكلمة المرور التي اخترتها.' : 'سيراجعه مدير المنصة، ويصلك بريد عند تفعيل حسابك.') + '</div><br><button class="btn big" onclick="closeModal();' + (r.auto ? "go('admin')" : 'navHome()') + '">' + (r.auto ? '🔐 الدخول الآن' : 'تم') + '</button></div>');
+  }).catch(function (e) { btn.disabled = false; btn.textContent = '📨 إرسال طلب التسجيل'; toast(e, 'err'); });
+}
+var _foot17 = footer;
+footer = function () {
+  var h = _foot17(), st = (S.b && S.b.settings) || {};
+  if (st.allowSignup === 'نعم' && role() !== 'طالب' && !S.adm) h = h.replace('<a onclick="go(\'admin\')">لوحة المعلم</a>', '<a onclick="go(\'admin\')">لوحة المعلم</a>·<a onclick="go(\'signup\')">📝 التسجيل كمعلم</a>');
+  return h;
+};
+var _pa17 = PP.admin;
+PP.admin = function (p) { var h = _pa17(p), st = (S.b && S.b.settings) || {}; if (st.allowSignup === 'نعم') h = h.replace('<div id="aperr"', '<div class="mut" style="margin-top:10px">ليس لديك حساب؟ <a style="cursor:pointer;color:var(--p);font-weight:700" onclick="go(\'signup\')">سجّل كمعلم</a></div><div id="aperr"'); return h.replace(/٦ أحرف فأكثر/g, '٤ أحرف أو أرقام فأكثر'); };
+/* طلبات التسجيل في صفحة المستخدمين */
+var _users17 = AP.a_users;
+AP.a_users = function (p) {
+  var h = _users17(p); if (!USERS || !canA('users')) return h;
+  var P = USERS.users.filter(function (u) { return u.status === 'بانتظار الموافقة'; }), E = canA('users', 2);
+  if (!P.length) return h;
+  var box = '<div class="card pend"><h3 style="margin-top:0">⏳ طلبات تسجيل بانتظار موافقتك (' + P.length + ')</h3>' + P.map(function (u) { return '<div class="lrow"><span class="lri">📋</span><div class="sp"><b>' + esc(u.name) + '</b><div class="mut" style="font-size:.85rem">' + esc(u.subject || '') + (u.school ? ' · ' + esc(u.school) : '') + ' · <span dir="ltr">' + esc(u.email) + '</span>' + (u.contact ? ' · <span dir="ltr">' + esc(u.contact) + '</span>' : '') + ' · ' + esc(u.created || '') + '</div></div>' + (E ? '<div class="lact"><button class="okb" onclick="signupDo(\'' + u.id + '\',true)">✅ قبول</button><button onclick="signupDo(\'' + u.id + '\',false)">✖ رفض</button></div>' : '') + '</div>'; }).join('') + '<div class="mut" style="font-size:.78rem;margin-top:6px">عند القبول أو الرفض يصله بريد تلقائيًا من حسابك في Google. وبعد القبول عدّل صلاحياته ومقرراته من قائمة المستخدمين.</div></div>';
+  return h.replace('<div class="card list"', box + '<div class="card list"');
+};
+function signupDo(id, ok) { call('aSignupStatus', { token: S.adm.token, id: id, approve: ok }).then(function (r) { USERS = r; if (r.data) S.adm.data = r.data; toast(ok ? '✅ فُعّل الحساب' + (r.sent ? ' وأُرسل له بريد' : '') : 'رُفض الطلب' + (r.sent ? ' وأُبلغ بالبريد' : '')); render(); }).catch(function (e) { toast(e, 'err'); }); }
+var _nc17 = navCount;
+navCount = function (id) { if (id === 'a_users') return N(D().pendingSignups); return _nc17(id); };
+var _ah17 = AP.a_home;
+AP.a_home = function (p) { var h = _ah17(p); if (S.adm && N(D().pendingSignups) && canA('users')) h = h.replace('<div class="kgrid">', '<div class="joinbanner" style="background:linear-gradient(120deg,#0ea5e9,#5b4be1)" onclick="go(\'a_users\',{})"><span class="ji">⏳</span><div class="sp"><b>' + N(D().pendingSignups) + ' طلب تسجيل معلم بانتظار موافقتك</b><small>اضغط لمراجعتها</small></div><span style="font-size:1.5rem">←</span></div><div class="kgrid">'); return h; };
+/* الإعدادات: التسجيل بجانب «اطلب منصتك» */
+window.NICE = window.NICE || {}; NICE.allowSignup = 'إظهار «التسجيل كمعلم» للزوار'; NICE.signupAuto = 'قبول المعلمين تلقائيًا دون مراجعة';
+
+/* ════════════ الإصدار ١٨: تخفيف اللوحة دون حذف شيء ════════════ */
+/* «المحتوى» و«بنك الأسئلة» تبقى كما هي، لكنها تُنقل للأدوات المتقدمة لأن «مساحة المقرر» توصل إليهما لكل درس */
+NAV.forEach(function (g) { g[2].forEach(function (t) { if (t[0] === 'a_content' || t[0] === 'a_bank') t[5] = 1; }); });
+/* رئيسية اللوحة: زر بارز للمتابعة في مساحة المقرر */
+var _ah18 = AP.a_home;
+AP.a_home = function (p) {
+  var h = _ah18(p); if (!S.adm) return h;
+  var k = acCourse(); if (!k || !k.id) return h;
+  var card = '<div class="contk" style="--c:' + esc(k.color || '#5b4be1') + '" role="button" tabindex="0" onclick="go(\'a_course\',{id:\'' + k.id + '\'})"><span class="kic">' + esc(k.icon || '📘') + '</span><div class="sp"><small>تابع العمل على مقررك</small><b>' + esc(k.subject || k.title) + ' — ' + esc(k.grade || '') + '</b><em>الدروس ودرس الأسبوع والمحتوى والأسئلة والتحديات في مكان واحد</em></div><span class="contgo">📘 فتح مساحة المقرر ←</span></div>';
+  var i = h.indexOf('<div class="hero">');
+  return i >= 0 ? h.slice(0, i) + card + h.slice(i) : card + h;
 };
 
 (function () { try { var t = sessionStorage.getItem('lab_adm'); if (t) { call('aData', { token: t }, true).then(function (d) { S.adm = { token: t, data: d }; }).catch(function () { sessionStorage.removeItem('lab_adm'); }); } } catch (e) {} })();
